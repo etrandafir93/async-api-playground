@@ -1,7 +1,7 @@
-package com.etrandafir.asyncapi.orderservice;
+package com.etrandafir.asyncapi.orderservice.events;
 
 public record StockUnavailable(
-    Sku sku,
+    String sku,
     int availableQuantity,
     String orderId,
     int quantityRequested

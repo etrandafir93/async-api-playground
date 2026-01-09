@@ -1,5 +1,7 @@
 package com.etrandafir.asyncapi.inventoryservice;
 
+import com.etrandafir.asyncapi.inventoryservice.events.OrderCreated;
+import com.etrandafir.asyncapi.inventoryservice.events.StockUnavailable;
 import io.github.springwolf.bindings.kafka.annotations.KafkaAsyncOperationBinding;
 import io.github.springwolf.core.asyncapi.annotations.AsyncListener;
 import io.github.springwolf.core.asyncapi.annotations.AsyncOperation;
@@ -29,15 +31,15 @@ class InventoryService {
 
         message.items()
             .forEach((sku, quantity) -> {
-                int availableQuantity = parseAvailableQuantity(sku.value());
-                System.out.println("Processing SKU: " + sku.value() + ", Requested: " + quantity + ", Available: " + availableQuantity);
+                int availableQuantity = parseAvailableQuantity(sku);
+                System.out.println("Processing SKU: " + sku + ", Requested: " + quantity + ", Available: " + availableQuantity);
 
                 if (availableQuantity < quantity) {
-                    System.out.println("Insufficient stock for " + sku.value() + ". Publishing stock unavailable event.");
+                    System.out.println("Insufficient stock for " + sku + ". Publishing stock unavailable event.");
                     StockUnavailable stockUnavailable = new StockUnavailable(sku, availableQuantity, message.orderId(), quantity);
                     publishStockUnavailable(stockUnavailable);
                 } else {
-                    System.out.println("Decreasing stock for product " + sku.value() + " by " + quantity);
+                    System.out.println("Decreasing stock for product " + sku + " by " + quantity);
                 }
             });
     }

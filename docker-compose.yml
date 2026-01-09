@@ -33,3 +33,27 @@ services:
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+
+  order-service:
+    build:
+      context: ./order-service
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: kafka:29092
+      SPRINGWOLF_PLUGIN_KAFKA_PUBLISHING_PRODUCER_BOOTSTRAP-SERVERS: kafka:29092
+
+  inventory-service:
+    build:
+      context: ./inventory-service
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: kafka:29092
+      SPRINGWOLF_PLUGIN_KAFKA_PUBLISHING_PRODUCER_BOOTSTRAP-SERVERS: kafka:29092
