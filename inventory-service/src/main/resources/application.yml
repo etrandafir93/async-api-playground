@@ -1,0 +1,56 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: inventory-service
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:9092
+      bindings:
+        orderCreated-in-0:
+          destination: order-created
+          group: inventory-service-group
+          content-type: application/json
+        stockUnavailable-out-0:
+          destination: stock-unavailable
+          content-type: application/json
+      default:
+        content-type: application/json
+    function:
+      definition: orderCreated
+
+springwolf:
+  enabled: true
+  docket:
+    info:
+      title: Inventory Service API
+      version: 1.0.0
+      description: Inventory Service - Async API documentation for Kafka topics
+    base-package: com.etrandafir.asyncapi.inventoryservice
+    servers:
+      kafka-server:
+        protocol: kafka
+        host: localhost:9092
+  use-fqn: true
+  scanner:
+    async-listener:
+      enabled: true
+    async-publisher:
+      enabled: true
+  plugin:
+    kafka:
+      publishing:
+        enabled: true
+        producer:
+          bootstrap-servers: localhost:9092
+          key-serializer: org.apache.kafka.common.serialization.StringSerializer
+          value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+          properties:
+            "[spring.json.trusted.packages]": "*"
+
+logging:
+  level:
+    com.etrandafir.asyncapi.inventoryservice: DEBUG

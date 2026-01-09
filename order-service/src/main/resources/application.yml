@@ -1,0 +1,51 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: order-service
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:9092
+      bindings:
+        stockUnavailable-in-0:
+          destination: stock-unavailable
+          group: order-service-group
+          content-type: application/json
+      default:
+        content-type: application/json
+    function:
+      definition: stockUnavailable
+
+springwolf:
+  enabled: true
+  docket:
+    info:
+      title: Order Service API
+      version: 1.0.0
+      description: Order Service - Async API documentation for Kafka topics
+    base-package: com.etrandafir.asyncapi.orderservice
+    servers:
+      kafka-server:
+        protocol: kafka
+        host: localhost:9092
+  use-fqn: true
+  scanner:
+    async-listener:
+      enabled: true
+    async-publisher:
+      enabled: true
+  plugin:
+    kafka:
+      publishing:
+        enabled: true
+        producer:
+          bootstrap-servers: localhost:9092
+          key-serializer: org.apache.kafka.common.serialization.StringSerializer
+          value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+logging:
+  level:
+    com.etrandafir.asyncapi.orderservice: DEBUG
