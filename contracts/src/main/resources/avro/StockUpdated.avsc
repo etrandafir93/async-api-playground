@@ -1,0 +1,23 @@
+{
+  "type": "record",
+  "name": "StockUpdated",
+  "namespace": "com.etrandafir.asyncapi.contracts.events",
+  "doc": "Event representing a stock level update after processing an order",
+  "fields": [
+    {
+      "name": "sku",
+      "type": "string",
+      "doc": "Product SKU code"
+    },
+    {
+      "name": "oldStock",
+      "type": "int",
+      "doc": "Stock level before the update"
+    },
+    {
+      "name": "currentStock",
+      "type": "int",
+      "doc": "Stock level after the update"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "type": "record",
+  "name": "OrderCreated",
+  "namespace": "com.etrandafir.asyncapi.contracts.events",
+  "doc": "Event representing a newly created order",
+  "fields": [
+    {
+      "name": "orderId",
+      "type": "string",
+      "doc": "Unique identifier for the order"
+    },
+    {
+      "name": "items",
+      "type": {
+        "type": "map",
+        "values": "int"
+      },
+      "doc": "Map of SKU to quantity requested"
+    }
+  ]
+}

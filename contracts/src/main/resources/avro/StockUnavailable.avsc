@@ -1,0 +1,28 @@
+{
+  "type": "record",
+  "name": "StockUnavailable",
+  "namespace": "com.etrandafir.asyncapi.contracts.events",
+  "doc": "Event representing insufficient stock for an order",
+  "fields": [
+    {
+      "name": "sku",
+      "type": "string",
+      "doc": "Product SKU code"
+    },
+    {
+      "name": "availableQuantity",
+      "type": "int",
+      "doc": "Current available quantity in inventory"
+    },
+    {
+      "name": "orderId",
+      "type": "string",
+      "doc": "Order identifier that requested the stock"
+    },
+    {
+      "name": "quantityRequested",
+      "type": "int",
+      "doc": "Quantity that was requested but unavailable"
+    }
+  ]
+}
