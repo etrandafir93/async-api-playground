@@ -3,20 +3,23 @@
 A microservices project demonstrating event-driven architecture with:
 - Sping Cloud Stream Kafka Binder
 - Springwolf for AsyncAPI documentation
-- JSON-based event payloads
+- Avro-based event payloads
 
 ## Architecture
 
 ```mermaid
 graph LR
-    A[Order Service] -->|subscribes to| B((stock-unavailable))
-    C[Inventory Service] -->|subscribes to| D((order-created))
-    C -->|publishes to| B
+    A((Order Service)) --> D[order.created]
+    B[stock.unavailable] --> A
+    D --> C((Inventory Service))
+    C --> B
+    C --> E[stock.updated]
 
     style A fill:#e1f5ff,stroke:#01579b
     style C fill:#fff3e0,stroke:#e65100
     style B fill:#fce4ec,stroke:#880e4f
     style D fill:#f3e5f5,stroke:#4a148c
+    style E fill:#e8f5e9,stroke:#1b5e20
 ```
 
 ## Services
