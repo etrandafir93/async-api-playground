@@ -14,8 +14,6 @@ import com.etrandafir.asyncapi.contracts.events.StockUnavailable;
 import com.etrandafir.asyncapi.contracts.events.StockUpdated;
 
 import io.github.springwolf.bindings.kafka.annotations.KafkaAsyncOperationBinding;
-import io.github.springwolf.core.asyncapi.annotations.AsyncListener;
-import io.github.springwolf.core.asyncapi.annotations.AsyncMessage;
 import io.github.springwolf.core.asyncapi.annotations.AsyncOperation;
 import io.github.springwolf.core.asyncapi.annotations.AsyncPublisher;
 
@@ -30,14 +28,6 @@ class InventoryServiceApp {
     }
 
     @Bean
-    @AsyncListener(
-        operation = @AsyncOperation(
-            channelName = "order-created",
-            description = "Processes order created events and checks inventory",
-            payloadType = OrderCreated.class
-        )
-    )
-    @KafkaAsyncOperationBinding
     Consumer<OrderCreated> orderCreated() {
         return this::processOrder;
     }

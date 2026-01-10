@@ -1,0 +1,246 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "extensionFields": {
+      "x-generator": "springwolf"
+    },
+    "title": "Inventory Service API",
+    "version": "1.0.0",
+    "description": "Inventory Service - Async API documentation for Kafka topics",
+    "x-generator": "springwolf"
+  },
+  "defaultContentType": "application/json",
+  "servers": {
+    "kafka-server": {
+      "host": "localhost:9092",
+      "protocol": "kafka"
+    }
+  },
+  "channels": {
+    "order-created": {
+      "address": "order-created",
+      "messages": {
+        "com.etrandafir.asyncapi.contracts.events.OrderCreated": {
+          "$ref": "#/components/messages/com.etrandafir.asyncapi.contracts.events.OrderCreated"
+        }
+      },
+      "bindings": {
+        "kafka": { }
+      }
+    },
+    "stock-unavailable": {
+      "address": "stock-unavailable",
+      "messages": {
+        "com.etrandafir.asyncapi.contracts.events.StockUnavailable": {
+          "$ref": "#/components/messages/com.etrandafir.asyncapi.contracts.events.StockUnavailable"
+        }
+      },
+      "bindings": { }
+    },
+    "stock-updated": {
+      "address": "stock-updated",
+      "messages": {
+        "com.etrandafir.asyncapi.contracts.events.StockUpdated": {
+          "$ref": "#/components/messages/com.etrandafir.asyncapi.contracts.events.StockUpdated"
+        }
+      },
+      "bindings": { }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HeadersNotDocumented": {
+        "title": "HeadersNotDocumented",
+        "type": "object",
+        "properties": { },
+        "description": "There can be headers, but they are not explicitly documented.",
+        "examples": [
+          { }
+        ]
+      },
+      "com.etrandafir.asyncapi.contracts.events.OrderCreated": {
+        "title": "OrderCreated",
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "orderId": {
+            "type": "string"
+          }
+        },
+        "examples": [
+          {
+            "items": {
+              "key": 0
+            },
+            "orderId": "string"
+          }
+        ]
+      },
+      "com.etrandafir.asyncapi.contracts.events.StockUnavailable": {
+        "title": "StockUnavailable",
+        "type": "object",
+        "properties": {
+          "availableQuantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "orderId": {
+            "type": "string"
+          },
+          "quantityRequested": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sku": {
+            "type": "string"
+          }
+        },
+        "examples": [
+          {
+            "availableQuantity": 0,
+            "orderId": "string",
+            "quantityRequested": 0,
+            "sku": "string"
+          }
+        ]
+      },
+      "com.etrandafir.asyncapi.contracts.events.StockUpdated": {
+        "title": "StockUpdated",
+        "type": "object",
+        "properties": {
+          "currentStock": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "oldStock": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sku": {
+            "type": "string"
+          }
+        },
+        "examples": [
+          {
+            "currentStock": 0,
+            "oldStock": 0,
+            "sku": "string"
+          }
+        ]
+      }
+    },
+    "messages": {
+      "com.etrandafir.asyncapi.contracts.events.OrderCreated": {
+        "headers": {
+          "$ref": "#/components/schemas/HeadersNotDocumented"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/com.etrandafir.asyncapi.contracts.events.OrderCreated"
+          }
+        },
+        "name": "com.etrandafir.asyncapi.contracts.events.OrderCreated",
+        "title": "OrderCreated",
+        "bindings": {
+          "kafka": { }
+        }
+      },
+      "com.etrandafir.asyncapi.contracts.events.StockUnavailable": {
+        "headers": {
+          "$ref": "#/components/schemas/HeadersNotDocumented"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/com.etrandafir.asyncapi.contracts.events.StockUnavailable"
+          }
+        },
+        "name": "com.etrandafir.asyncapi.contracts.events.StockUnavailable",
+        "title": "StockUnavailable",
+        "bindings": {
+          "kafka": {
+            "bindingVersion": "0.5.0"
+          }
+        }
+      },
+      "com.etrandafir.asyncapi.contracts.events.StockUpdated": {
+        "headers": {
+          "$ref": "#/components/schemas/HeadersNotDocumented"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/com.etrandafir.asyncapi.contracts.events.StockUpdated"
+          }
+        },
+        "name": "com.etrandafir.asyncapi.contracts.events.StockUpdated",
+        "title": "StockUpdated",
+        "bindings": {
+          "kafka": {
+            "bindingVersion": "0.5.0"
+          }
+        }
+      }
+    }
+  },
+  "operations": {
+    "order-created_receive_orderCreated": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/order-created"
+      },
+      "description": "Auto-generated description",
+      "bindings": {
+        "kafka": { }
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/order-created/messages/com.etrandafir.asyncapi.contracts.events.OrderCreated"
+        }
+      ]
+    },
+    "stock-unavailable_send_publishStockUnavailable": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/stock-unavailable"
+      },
+      "title": "stock-unavailable_send",
+      "description": "Publishes stock unavailable events when requested quantity exceeds available stock",
+      "bindings": {
+        "kafka": {
+          "bindingVersion": "0.5.0"
+        }
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/stock-unavailable/messages/com.etrandafir.asyncapi.contracts.events.StockUnavailable"
+        }
+      ]
+    },
+    "stock-updated_send_publishStockUpdated": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/stock-updated"
+      },
+      "title": "stock-updated_send",
+      "description": "Publishes stock updated events when stock level changes after processing an order",
+      "bindings": {
+        "kafka": {
+          "bindingVersion": "0.5.0"
+        }
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/stock-updated/messages/com.etrandafir.asyncapi.contracts.events.StockUpdated"
+        }
+      ]
+    }
+  }
+}
