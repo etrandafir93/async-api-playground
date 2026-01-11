@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: order-service
+
+  kafka:
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        specific.avro.reader: true
+        schema.registry.url: mock://test-registry
+
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+          configuration:
+            schema.registry.url: mock://test-registry
+        bindings:
+          orderCreated-out-0:
+            producer:
+              configuration:
+                key.serializer: org.apache.kafka.common.serialization.StringSerializer
+                value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+                specific.avro.reader: true
+      bindings:
+        orderCreated-out-0:
+          destination: order-created
+          content-type: application/*+avro
+          producer:
+            use-native-encoding: true
+        testListener-in-0:
+          group: test-group
+          destination: order-created
+          content-type: application/*+avro

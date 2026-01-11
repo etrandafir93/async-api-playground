@@ -13,7 +13,9 @@
       "WebFetch(domain:www.springwolf.dev)",
       "WebFetch(domain:github.com)",
       "Bash(docker-compose build:*)",
-      "Bash(docker system prune:*)"
+      "Bash(docker system prune:*)",
+      "Bash(mvn test:*)",
+      "Bash(./mvnw test:*)"
     ],
     "deny": [],
     "ask": []

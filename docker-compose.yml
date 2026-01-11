@@ -47,32 +47,3 @@ services:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
       KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
-
-  order-service:
-    build:
-      context: .
-      dockerfile: ./order-service/Dockerfile
-    depends_on:
-      - kafka
-      - schema-registry
-    ports:
-      - "8081:8081"
-    environment:
-      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: kafka:29092
-      SPRING_CLOUD_STREAM_KAFKA_BINDER_CONFIGURATION_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-      SPRINGWOLF_PLUGIN_KAFKA_PUBLISHING_PRODUCER_BOOTSTRAP-SERVERS: kafka:29092
-      SPRINGWOLF_PLUGIN_KAFKA_PUBLISHING_PRODUCER_PROPERTIES_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-
-  inventory-service:
-    build:
-      context: .
-      dockerfile: ./inventory-service/Dockerfile
-    depends_on:
-      - kafka
-      - schema-registry
-    ports:
-      - "8082:8082"
-    environment:
-      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: kafka:29092
-      SPRING_CLOUD_STREAM_KAFKA_BINDER_CONFIGURATION_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-      SPRINGWOLF_PLUGIN_KAFKA_PUBLISHING_PRODUCER_BOOTSTRAP-SERVERS: kafka:29092

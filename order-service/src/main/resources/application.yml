@@ -5,6 +5,8 @@ spring:
   application:
     name: order-service
   cloud:
+    function:
+      definition: stockUnavailable
     stream:
       kafka:
         binder:
@@ -18,15 +20,24 @@ spring:
                 key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
                 value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
                 specific.avro.reader: true
+          orderCreated-out-0:
+            producer:
+              configuration:
+                key.serializer: org.apache.kafka.common.serialization.StringSerializer
+                value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+                specific.avro.reader: true
       bindings:
         stockUnavailable-in-0:
           destination: stock-unavailable
           group: order-service-group
           content-type: application/*+avro
+        orderCreated-out-0:
+          destination: order-created
+          content-type: application/*+avro
+          producer:
+            use-native-encoding: true
       default:
         content-type: application/*+avro
-    function:
-      definition: stockUnavailable
 
 springwolf:
   enabled: true
