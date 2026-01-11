@@ -15,7 +15,9 @@
       "Bash(docker-compose build:*)",
       "Bash(docker system prune:*)",
       "Bash(mvn test:*)",
-      "Bash(./mvnw test:*)"
+      "Bash(./mvnw test:*)",
+      "Bash(mvn:*)",
+      "Bash(chmod:*)"
     ],
     "deny": [],
     "ask": []
