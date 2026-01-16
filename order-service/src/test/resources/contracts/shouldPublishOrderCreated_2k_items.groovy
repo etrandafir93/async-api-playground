@@ -3,15 +3,15 @@ package contracts
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    label("orderCreatedWithTooManyItems")
+    label("order-2k-items")
     input {
-        triggeredBy("orderCreatedWithTooManyItems()")
+        triggeredBy("orderCreatedWith2kItems()")
     }
     outputMessage {
         sentTo("order-created")
         body(
             orderId: $(regex(uuid())),
-            items:  ["sku-100": 1000, "sku-200": 2000]
+            items:  ["sku-1": 1000, "sku-2": 1000]
         )
     }
 }

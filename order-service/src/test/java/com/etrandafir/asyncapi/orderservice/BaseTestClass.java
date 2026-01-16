@@ -63,16 +63,16 @@ public abstract class BaseTestClass {
 
     public void orderCreated() {
         Map<String, Integer> items = Map.of(
-            "sku-100", 10,
-            "sku-200", 20
+            "sku-1", 1,
+            "sku-2", 1
         );
         orderController.createOrder(new CreateOrderRequest(items));
     }
 
-    public void orderCreatedWithTooManyItems() {
+    public void orderCreatedWith2kItems() {
         Map<String, Integer> items = Map.of(
-            "sku-100", 1000,
-            "sku-200", 2000
+            "sku-1", 1000,
+            "sku-2", 1000
         );
         orderController.createOrder(new CreateOrderRequest(items));
     }

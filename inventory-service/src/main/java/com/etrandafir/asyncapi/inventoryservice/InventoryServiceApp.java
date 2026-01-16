@@ -5,23 +5,17 @@ import java.util.function.Consumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.annotation.Bean;
-import org.springframework.messaging.handler.annotation.Payload;
 
 import com.etrandafir.asyncapi.contracts.events.OrderCreated;
 import com.etrandafir.asyncapi.contracts.events.StockUnavailable;
 import com.etrandafir.asyncapi.contracts.events.StockUpdated;
 
-import io.github.springwolf.bindings.kafka.annotations.KafkaAsyncOperationBinding;
-import io.github.springwolf.core.asyncapi.annotations.AsyncOperation;
-import io.github.springwolf.core.asyncapi.annotations.AsyncPublisher;
-
 @SpringBootApplication
 class InventoryServiceApp {
 
     @Autowired
-    private StreamBridge streamBridge;
+    private StockUpdatePublisher stockUpdatePublisher;
 
     public static void main(String[] args) {
         SpringApplication.run(InventoryServiceApp.class, args);
@@ -30,28 +24,6 @@ class InventoryServiceApp {
     @Bean
     Consumer<OrderCreated> orderCreated() {
         return this::processOrder;
-    }
-
-    @AsyncPublisher(
-        operation = @AsyncOperation(
-            channelName = "stock-unavailable",
-            description = "Publishes stock unavailable events when requested quantity exceeds available stock"
-        )
-    )
-    @KafkaAsyncOperationBinding
-    public void publishStockUnavailable(@Payload StockUnavailable stockUnavailable) {
-        streamBridge.send("stockUnavailable-out-0", stockUnavailable);
-    }
-
-    @AsyncPublisher(
-        operation = @AsyncOperation(
-            channelName = "stock-updated",
-            description = "Publishes stock updated events when stock level changes after processing an order"
-        )
-    )
-    @KafkaAsyncOperationBinding
-    public void publishStockUpdated(@Payload StockUpdated stockUpdated) {
-        streamBridge.send("stockUpdated-out-0", stockUpdated);
     }
 
     public void processOrder(OrderCreated message) {
@@ -71,7 +43,7 @@ class InventoryServiceApp {
                         .setOrderId(message.getOrderId())
                         .setQuantityRequested(quantity)
                         .build();
-                    publishStockUnavailable(stockUnavailable);
+                    stockUpdatePublisher.publishStockUnavailable(stockUnavailable);
                 } else {
                     System.out.println("Decreasing stock for product " + sku + " by " + quantity);
                     int newStock = availableQuantity - quantity;
@@ -80,7 +52,7 @@ class InventoryServiceApp {
                         .setOldStock(availableQuantity)
                         .setCurrentStock(newStock)
                         .build();
-                    publishStockUpdated(stockUpdated);
+                    stockUpdatePublisher.publishStockUpdated(stockUpdated);
                 }
             });
     }

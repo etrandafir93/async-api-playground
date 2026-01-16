@@ -6,11 +6,19 @@ spring:
     name: inventory-service
   cloud:
     stream:
+      function:
+        cloud-events:
+          enabled: false
       kafka:
         binder:
-          brokers: localhost:9092
+          brokers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
           configuration:
-            schema.registry.url: http://localhost:8083
+            schema.registry.url: mock://test-registry
+          consumer-properties:
+            key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+            specific.avro.reader: true
+            schema.registry.url: mock://test-registry
         bindings:
           orderCreated-in-0:
             consumer:
@@ -18,6 +26,7 @@ spring:
                 key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
                 value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
                 specific.avro.reader: true
+                schema.registry.url: mock://test-registry
           stockUnavailable-out-0:
             producer:
               configuration:
@@ -34,15 +43,14 @@ spring:
         orderCreated-in-0:
           destination: order-created
           group: inventory-service-group
-          content-type: application/*+avro
+          consumer:
+            useNativeDecoding: true
         stockUnavailable-out-0:
           destination: stock-unavailable
           content-type: application/*+avro
         stockUpdated-out-0:
           destination: stock-unavailable
           content-type: application/*+avro
-      default:
-        content-type: application/*+avro
     function:
       definition: orderCreated
 
@@ -52,6 +60,13 @@ spring:
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
       properties:
         schema.registry.url: mock://test-registry
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        specific.avro.reader: true
+        schema.registry.url: mock://test-registry
+
 
 springwolf:
   enabled: true

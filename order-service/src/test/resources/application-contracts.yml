@@ -16,7 +16,9 @@ spring:
         binder:
           brokers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
           configuration:
+            specific.avro.reader: true
             schema.registry.url: mock://test-registry
+            properties.schema.registry.url: mock://test-registry
         bindings:
           orderCreated-out-0:
             producer:
